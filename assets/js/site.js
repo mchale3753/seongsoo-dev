@@ -93,5 +93,17 @@
     }
   }
 
-  document.body.classList.add('page-enter');
+  // first-load screen: keep it briefly, then reveal after assets are ready.
+  var loadStartedAt = (window.performance && performance.now) ? performance.now() : Date.now();
+  function markLoaded(){
+    var now = (window.performance && performance.now) ? performance.now() : Date.now();
+    var elapsed = now - loadStartedAt;
+    var delay = Math.max(0, 520 - elapsed);
+    window.setTimeout(function(){
+      document.documentElement.classList.add('site-loaded');
+      document.body.classList.add('page-enter');
+    }, delay);
+  }
+  if (document.readyState === 'complete') markLoaded();
+  else window.addEventListener('load', markLoaded, { once:true });
 })();

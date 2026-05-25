@@ -35,6 +35,35 @@ img{max-width:100%;display:block}
 button{font-family:inherit;color:inherit}
 hr{border:0;border-top:1px solid var(--line-soft);margin:0}
 
+/* first-load screen */
+html:not(.site-loaded) body{overflow:hidden}
+html:not(.site-loaded) body::before{
+  content:"Seongsoo Shin";
+  position:fixed;inset:0;z-index:9999;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(184,152,86,.12), transparent 30%),
+    linear-gradient(180deg,#0a0a0a 0%,#080808 100%);
+  color:var(--ink);
+  font-family:var(--mono);font-size:12px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  pointer-events:none;
+  transition:opacity .45s ease, visibility .45s ease;
+}
+html:not(.site-loaded) body::after{
+  z-index:10000;
+  background:
+    linear-gradient(90deg, transparent 0 calc(50% - 54px), var(--accent) calc(50% - 54px) calc(50% - 6px), transparent calc(50% - 6px) calc(50% + 6px), rgba(255,255,255,.18) calc(50% + 6px) calc(50% + 54px), transparent calc(50% + 54px) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-repeat:no-repeat,repeat;
+  background-size:108px 1px,180px 180px;
+  background-position:center calc(50% + 20px),0 0;
+  opacity:.9;mix-blend-mode:normal;
+  animation:loaderLine .9s ease-in-out infinite alternate;
+}
+html.site-loaded body::before{opacity:0;visibility:hidden}
+@keyframes loaderLine{from{background-size:42px 1px,180px 180px}to{background-size:108px 1px,180px 180px}}
+
 /* subtle grain only */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
