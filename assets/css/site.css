@@ -227,7 +227,7 @@ nav.nav > a.active::after{
   nav.nav .lang-toggle{margin:16px 2px 0;align-self:stretch;justify-content:center;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.08)}
   nav.nav .lang-toggle button{flex:1;justify-content:center;padding:8px 10px}
   /* dim backdrop when drawer open */
-  body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:35;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:25;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
   body.nav-open{overflow:hidden}
 }
 
