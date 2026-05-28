@@ -395,7 +395,7 @@ html[data-lang="ko"] .career-intro h1{font-weight:600;letter-spacing:-0.028em}
 .signals-card dt{color:var(--ink-mute)}
 .signals-card dd{margin:0;color:var(--ink);text-align:left}
 .signals-card .em{color:var(--accent-2)}
-.profile-card-photo{display:block;width:100%;height:auto;max-height:260px;aspect-ratio:4/5;object-fit:cover;border-radius:12px;border:1px solid var(--line);margin:0 0 20px;background:var(--bg-soft);filter:saturate(.98) contrast(1.02)}
+.profile-card-photo{display:block;width:100%;height:auto;max-height:320px;aspect-ratio:1/1;object-fit:cover;object-position:center 20%;border-radius:12px;border:1px solid var(--line);margin:0 0 20px;background:var(--bg-soft);filter:saturate(.98) contrast(1.02)}
 
 /* timeline */
 .tl{display:flex;flex-direction:column}
@@ -726,7 +726,7 @@ html[data-lang="ko"] .contact-card h3{font-weight:600;letter-spacing:-0.025em}
   .sec-head .tag{font-size:10px}
   .plist a{padding:14px 0}
   /* career intro photo size guard */
-  .profile-card-photo{max-height:200px}
+  .profile-card-photo{max-height:260px}
   /* contact card padding */
   .contact-card{padding:26px 18px}
 }
