@@ -3,6 +3,41 @@
   var y = document.getElementById('y');
   if (y) y.textContent = new Date().getFullYear();
 
+  // ───── mobile nav drawer ─────
+  var navToggle = document.querySelector('.nav-toggle');
+  var navEl = document.querySelector('header.top nav.nav');
+  function setNav(open){
+    if (!navEl || !navToggle) return;
+    navEl.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('nav-open', open);
+  }
+  if (navToggle && navEl){
+    navToggle.addEventListener('click', function(){
+      var isOpen = navEl.classList.contains('open');
+      setNav(!isOpen);
+    });
+    // close on link click (drawer)
+    navEl.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ setNav(false); });
+    });
+    // close on Esc
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && navEl.classList.contains('open')) setNav(false);
+    });
+    // close when clicking the dim backdrop (outside drawer)
+    document.addEventListener('click', function(e){
+      if (!navEl.classList.contains('open')) return;
+      if (navEl.contains(e.target) || navToggle.contains(e.target)) return;
+      setNav(false);
+    });
+    // close when resizing back to desktop
+    var mql = window.matchMedia('(max-width:780px)');
+    var onChange = function(){ if (!mql.matches) setNav(false); };
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange);
+  }
+
   // language toggle
   var langBtns = document.querySelectorAll('.lang-toggle button[data-set-lang]');
   function setLang(l){

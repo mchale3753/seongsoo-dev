@@ -143,6 +143,7 @@ header.top{
   -webkit-backdrop-filter:blur(14px) saturate(140%);
   background:rgba(10,10,10,.78);
   border-bottom:1px solid var(--line-soft);
+  padding-top:env(safe-area-inset-top);
 }
 .top-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:18px}
 .brand{
@@ -163,8 +164,54 @@ nav.nav > a:hover, nav.nav > a.active{color:var(--ink)}
 nav.nav > a.active::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);
 }
+
+/* hamburger button — hidden on desktop, shown on mobile */
+.nav-toggle{
+  display:none;
+  background:transparent;border:1px solid var(--line);
+  width:40px;height:40px;border-radius:6px;
+  align-items:center;justify-content:center;
+  cursor:pointer;padding:0;color:var(--ink);
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-toggle:hover, .nav-toggle:focus-visible{border-color:var(--accent);color:var(--accent-2)}
+.nav-toggle .bars{display:flex;flex-direction:column;gap:5px;width:18px}
+.nav-toggle .bars span{
+  display:block;height:1.5px;background:currentColor;border-radius:1px;
+  transition:transform .25s ease, opacity .2s ease;transform-origin:center;
+}
+.nav-toggle[aria-expanded="true"] .bars span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] .bars span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] .bars span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
 @media (max-width:780px){
-  nav.nav > a:not(.lang-toggle){display:none}
+  .nav-toggle{display:inline-flex}
+  nav.nav{
+    position:fixed;top:0;right:0;
+    width:min(320px,82vw);height:100vh;height:100dvh;
+    background:rgba(10,10,10,.98);
+    backdrop-filter:blur(20px) saturate(150%);
+    -webkit-backdrop-filter:blur(20px) saturate(150%);
+    border-left:1px solid var(--line);
+    flex-direction:column;align-items:stretch;gap:0;
+    padding:calc(72px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom));
+    transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.7,.2,1);
+    z-index:40;overflow-y:auto;
+  }
+  nav.nav.open{transform:translateX(0)}
+  nav.nav > a{
+    display:flex;align-items:center;gap:14px;
+    padding:18px 4px;font-size:14px;letter-spacing:.06em;
+    border-bottom:1px solid var(--line-soft);color:var(--ink-dim);
+  }
+  nav.nav > a .num{color:var(--ink-faint);margin-right:0;min-width:28px}
+  nav.nav > a.active{color:var(--ink)}
+  nav.nav > a.active::after{display:none}
+  nav.nav > a.active{background:linear-gradient(90deg,rgba(184,152,86,.08),transparent);padding-left:12px;border-left:2px solid var(--accent)}
+  nav.nav .lang-toggle{margin-top:24px;align-self:flex-start}
+  /* dim backdrop when drawer open */
+  body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  body.nav-open{overflow:hidden}
 }
 
 /* lang toggle */
@@ -627,3 +674,59 @@ html[data-lang="ko"] .contact-card h3{font-weight:600;letter-spacing:-0.025em}
 /* page enter fade */
 .page-enter{animation:pageIn .45s ease-out both}
 @keyframes pageIn{from{opacity:0}to{opacity:1}}
+
+/* ─────────────────────────────────────────────
+   MOBILE-FIRST POLISH (≤780 / ≤560)
+   ───────────────────────────────────────────── */
+
+/* skip link for keyboard users */
+.skip-link{
+  position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+}
+.skip-link:focus{
+  position:fixed;top:12px;left:12px;width:auto;height:auto;
+  padding:10px 14px;background:var(--ink);color:var(--bg);
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  border-radius:6px;z-index:9999;
+}
+
+@media (max-width:780px){
+  body{font-size:15.5px}
+  /* idx-cta — full-width buttons stacked */
+  .idx-cta{flex-direction:column;gap:10px;align-items:stretch;margin-top:36px}
+  .idx-cta .btn{justify-content:center;padding:14px 18px}
+  /* intro-meta natural wrapping */
+  .intro-meta{flex-direction:column;gap:12px;margin-top:24px}
+  .intro-meta > span{display:flex;flex-direction:column;gap:2px}
+  .intro-meta .k{margin-right:0}
+  /* project detail aside — drop sticky on mobile */
+  .proj-detail aside{position:static;top:auto}
+  /* footer — let pieces wrap */
+  .foot .wrap{flex-direction:column;align-items:flex-start;gap:6px}
+  .foot .wrap > div:last-child{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+  .foot .wrap > div:last-child a{display:inline-block}
+  .foot .wrap > div:last-child{font-size:11px}
+  /* lightbox — give nav buttons safe space */
+  .lightbox{padding:20px 14px}
+  .lightbox .lb-close{top:14px;right:14px}
+  .lightbox .lb-nav{width:38px;height:38px;font-size:16px}
+  .lightbox .lb-prev{left:10px}
+  .lightbox .lb-next{right:10px}
+  .lightbox .lb-meta{bottom:14px;font-size:10px}
+}
+
+@media (max-width:560px){
+  .intro{padding-top:clamp(40px,7vw,80px)}
+  .intro .eyebrow{margin-bottom:24px;font-size:10.5px}
+  .intro h1{font-size:clamp(28px,6.6vw,36px);margin-bottom:18px}
+  html[data-lang="ko"] .intro h1{font-size:clamp(24px,5.8vw,32px)}
+  .intro-visual{min-height:240px;max-width:100%}
+  .intro-visual img{min-height:240px}
+  .sec-head{flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .sec-head .tag{font-size:10px}
+  .plist a{padding:14px 0}
+  /* career intro photo size guard */
+  .profile-card-photo{max-height:200px}
+  /* contact card padding */
+  .contact-card{padding:26px 18px}
+}
