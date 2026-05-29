@@ -869,6 +869,8 @@ section{border-top-color:var(--line-glass-soft)}
   .sec-head{flex-wrap:wrap;gap:8px;margin-bottom:24px}
   .sec-head .tag{font-size:10px}
   .plist a{padding:14px 0}
+  /* career intro: add breathing room on the sides of the body copy */
+  .career-intro>div:first-child{padding-left:8px;padding-right:8px}
   /* career intro profile card size guard */
   .career-intro .signals-card{max-width:300px;margin-left:auto;margin-right:auto}
   /* contact card padding */
