@@ -387,7 +387,7 @@ html[data-lang="ko"] .plist .title{font-weight:500;letter-spacing:-0.02em}
 /* ─────────────────────────────────────────────
    CAREER PAGE
    ───────────────────────────────────────────── */
-.career-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:56px;align-items:start;padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px)}
+.career-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:clamp(40px,5vw,72px);align-items:start}
 .career-intro .signals-card{justify-self:end;width:100%;max-width:340px}
 @media (max-width:880px){.career-intro{grid-template-columns:1fr;gap:28px}.career-intro .signals-card{justify-self:start;max-width:360px}}
 .career-intro h1{
