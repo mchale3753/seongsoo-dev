@@ -35,3 +35,4 @@ assets/profile/derived/_profile_retouch_v2.jpg
 scripts/retouch_profile_images.py
 scripts/retouch_profile_v2.py
 scripts/replace_index_hero_v3.py
+scripts/brighten_profile_card.py
