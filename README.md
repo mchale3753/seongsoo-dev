@@ -53,7 +53,7 @@
 | 항목 | 사이트 표기 | 확인 포인트 |
 |---|---|---|
 | 영문명 | Seongsoo Shin | vault directive (2026-05-16 "일단 고정"). Sean Shin 잔존 표기와 정합 OK. |
-| 이메일 (업무) | Mchale3753@hotmail.com | SEEK·영문 이력서와 정합 |
+| 이메일 (업무) | inbox@seongsoo.dev | 공개 연락처와 정합 |
 | 전화 | +82 10-4056-0416 | 공개 노출 여부 본인 결정 |
 | Nmodelin 수치 | "Series-A 자금", "cross-border 매출" | NDA·합의 범위 vault 표시는 ambiguous — 노출 보수적으로 표현, 구체 매출액·MRR은 의도적으로 미기재 |
 | Ranking GG 동접 | "~100 concurrent" | vault 명시 |
