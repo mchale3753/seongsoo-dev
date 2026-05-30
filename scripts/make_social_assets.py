@@ -39,6 +39,39 @@ img = Image.alpha_composite(img.convert("RGBA"), glow).convert("RGB")
 d = ImageDraw.Draw(img)
 
 PAD = 80
+
+# ---------- profile photo on the right ----------
+PHOTO = ROOT / "assets" / "profile" / "derived" / "contact-portrait.jpg"
+photo_w = 400
+try:
+    ph = Image.open(PHOTO).convert("RGB")
+    pw, phh = ph.size
+    target_ratio = photo_w / H
+    src_ratio = pw / phh
+    if src_ratio > target_ratio:
+        new_w = int(phh * target_ratio)
+        left = (pw - new_w) // 2
+        ph = ph.crop((left, 0, left + new_w, phh))
+    else:
+        new_h = int(pw / target_ratio)
+        top = (phh - new_h) // 2
+        ph = ph.crop((0, top, pw, top + new_h))
+    ph = ph.resize((photo_w, H), Image.LANCZOS)
+    img.paste(ph, (W - photo_w, 0))
+    # left-edge gradient fade from bg into photo so text side stays clean
+    fade = Image.new("RGBA", (220, H), (0, 0, 0, 0))
+    fd = ImageDraw.Draw(fade)
+    for i in range(220):
+        a = int(255 * (1 - i / 220))
+        fd.line([(i, 0), (i, H)], fill=(10, 10, 10, a))
+    img.paste(fade, (W - photo_w, 0), fade)
+    # thin gold seam
+    d.rectangle([W - photo_w, 0, W - photo_w + 3, H], fill=GOLD)
+except Exception as e:
+    print("photo skip:", e)
+
+d = ImageDraw.Draw(img)
+
 # top: green dot + brand
 dot_y = PAD + 8
 d.ellipse([PAD, dot_y, PAD + 18, dot_y + 18], fill=GOOD)
@@ -55,25 +88,30 @@ d.text((PAD, 312), "Full-stack Software Engineer", font=role_f, fill=GOLD2)
 sub_f = F(REG, 30)
 d.text((PAD, 392), "A decade shipping product end to end.", font=sub_f, fill=DIM)
 
-# chips
+# chips (wrap to a new row if they'd collide with the photo)
 chip_f = F(REG, 26)
 chips = ["ex-CTO", "Series A", "KR + JP", "React · Laravel · Node"]
 x = PAD
-cy2 = 470
+cy2 = 458
+row_h = 64
+max_x = W - photo_w - 40  # keep clear of the photo seam
 for c in chips:
     bbox = d.textbbox((0, 0), c, font=chip_f)
     tw = bbox[2] - bbox[0]
     pad_x = 22
     box_w = tw + pad_x * 2
+    if x + box_w > max_x:
+        x = PAD
+        cy2 += row_h
     d.rounded_rectangle([x, cy2, x + box_w, cy2 + 52], radius=10,
                         outline=(58, 58, 58), width=2, fill=(20, 20, 20))
     d.text((x + pad_x, cy2 + 11), c, font=chip_f, fill=DIM)
     x += box_w + 16
 
 # bottom availability + gold rule
-d.rectangle([PAD, 560, PAD + 110, 564], fill=GOLD)
-avail_f = F(REG, 26)
-d.text((PAD, 580), "Available from March 2027", font=avail_f, fill=MUTE)
+d.rectangle([PAD, 590, PAD + 110, 594], fill=GOLD)
+avail_f = F(REG, 24)
+d.text((PAD, 602), "Available from March 2027  ·  seongsoo.dev", font=avail_f, fill=MUTE)
 
 og_path = OUT / "og.png"
 img.save(og_path, "PNG")
