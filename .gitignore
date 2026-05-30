@@ -27,3 +27,8 @@ tmp-*.png
 # Asset backup originals
 *.orig
 assets/profile/derived/_preopt/
+assets/profile/derived/_pre_retouch/
+assets/profile/derived/_retouch_contact_sheet.jpg
+assets/profile/derived/_profile_retouch_v2.jpg
+scripts/retouch_profile_images.py
+scripts/retouch_profile_v2.py
