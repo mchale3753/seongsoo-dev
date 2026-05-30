@@ -530,6 +530,14 @@ html[data-lang="ko"] .proj-hero h1{font-weight:600;letter-spacing:-0.03em}
 .localized-ko{display:none}
 html[data-lang="ko"] .localized-en{display:none!important}
 html[data-lang="ko"] .localized-ko{display:grid!important}
+/* screenshot figure + bilingual caption (real KO UI, captioned per language) */
+.gallery figure.shot-fig{margin:0;display:flex;flex-direction:column;gap:0}
+.gallery figure.shot-fig .shot{margin:0}
+.gallery figure.shot-fig figcaption{
+  font-family:var(--mono);font-size:11px;line-height:1.5;color:var(--ink-mute);
+  letter-spacing:.01em;padding:9px 2px 2px;
+}
+.gallery figure.shot-fig figcaption .cap-n{color:var(--ink-faint);margin-right:7px}
 .gallery .shot.cover-portrait,
 .gallery .shot.phone-portrait,
 .gallery .shot.store-portrait{
