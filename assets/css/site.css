@@ -145,7 +145,7 @@ header.top{
   border-bottom:1px solid var(--line-soft);
   padding-top:env(safe-area-inset-top);
 }
-.top-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:18px}
+.top-row{display:flex;align-items:center;justify-content:space-between;padding-block:16px;gap:18px}
 .brand{
   display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12.5px;
   color:var(--ink-dim);border:none;
@@ -194,7 +194,7 @@ nav.nav > a.active::after{
 @media (max-width:780px){
   .nav-toggle{display:inline-flex}
   header.top .wrap{padding-left:max(var(--pad),env(safe-area-inset-left));padding-right:max(var(--pad),env(safe-area-inset-right))}
-  .top-row{padding:12px 0;gap:12px}
+  .top-row{padding-block:12px;gap:12px}
   .brand{gap:9px;font-size:12px}
   .brand .sep{margin:0 2px}
   nav.nav{
