@@ -26,3 +26,4 @@ tmp-*.png
 
 # Asset backup originals
 *.orig
+assets/profile/derived/_preopt/
