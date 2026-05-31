@@ -608,7 +608,9 @@ html[data-lang="ko"] .localized-ko{display:grid!important}
     display:flex;
     grid-template-columns:none;
     overflow-x:auto;
+    overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
     scroll-snap-type:x mandatory;
   }
   .store-sequence .shot{
@@ -813,7 +815,6 @@ section{border-top-color:var(--line-glass-soft)}
   box-shadow:var(--shadow-panel-soft);
 }
 .gallery .shot:hover,.team-shot:hover{border-color:rgba(184,152,86,.34);transform:translateY(-3px)}
-.store-sequence{overflow:hidden}
 .store-sequence .shot{box-shadow:none;border-radius:0}
 .proj-nav{border-top-color:var(--line-glass-soft)}
 .proj-nav a:hover{border-color:rgba(184,152,86,.32);background:linear-gradient(180deg,var(--panel-hover),var(--panel));transform:translateY(-2px)}
