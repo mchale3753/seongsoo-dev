@@ -521,6 +521,18 @@ html[data-lang="ko"] .proj-hero h1{font-weight:600;letter-spacing:-0.03em}
 .proj-detail aside dd{margin:0;color:var(--ink);text-align:left;max-width:100%}
 .proj-detail aside .stack-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-start}
 .proj-detail aside .chip{font-size:10.5px;padding:3px 7px}
+.proj-detail aside.project-sidecards{
+  background:transparent;border:0;border-radius:0;padding:0;
+  display:grid;gap:16px;box-shadow:none;
+}
+.proj-detail aside.project-sidecards .side-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px 22px;font-family:var(--mono);font-size:12px;
+}
+.proj-detail aside.project-sidecards .team-card h3{margin:0 0 8px;font-family:var(--serif);font-size:20px;font-style:italic;color:var(--ink)}
+.proj-detail aside.project-sidecards .team-card p{margin:0 0 14px;color:var(--ink-mute);font-family:var(--sans);font-size:13px;line-height:1.55}
+.proj-detail aside.project-sidecards .team-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.proj-detail aside.project-sidecards .team-shot{aspect-ratio:1/1;border-radius:10px}
 
 .gallery{
   display:grid;grid-template-columns:1fr;gap:12px;
@@ -757,6 +769,8 @@ section{border-top-color:var(--line-glass-soft)}
 .plist .arrow{font-size:16px}
 
 .signals-card,.proj-detail aside,.contact-card{padding:24px}
+.proj-detail aside.project-sidecards{padding:0;background:transparent;border:0;box-shadow:none}
+.proj-detail aside.project-sidecards .side-card{padding:24px;border-color:var(--line-glass);box-shadow:var(--shadow-panel-soft)}
 .signals-card .row,.proj-detail aside .row,.contact-grid > div{border-color:var(--line-glass-soft)}
 .profile-card-photo,.contact-portrait{
   border-radius:14px;
