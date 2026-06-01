@@ -336,7 +336,7 @@ html[data-lang="ko"] .intro h1 .light{font-weight:400;color:var(--ink-mute)}
 @media (max-width:560px){.intro-visual{min-height:320px}.intro-visual img{min-height:320px}}
 
 /* Project list (silva-style table with thumbnails) */
-.plist{margin-top:0;border-top:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+.plist{margin-top:0;border-top:1px solid var(--line-soft);border-radius:3px;overflow:hidden}
 .plist a{
   display:grid;grid-template-columns:52px 96px 1fr auto 36px;
   gap:20px;align-items:center;
@@ -789,7 +789,7 @@ section{border-top-color:var(--line-glass-soft)}
 
 .plist{
   border-top:1px solid var(--line-glass-soft);
-  border-radius:var(--radius-panel);
+  border-radius:5px;
   overflow:hidden;
   background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006));
 }
@@ -846,7 +846,7 @@ section{border-top-color:var(--line-glass-soft)}
 .foot{border-top-color:var(--line-glass-soft)}
 
 @media (max-width:780px){
-  .plist{border-radius:14px}
+  .plist{border-radius:4px}
   .plist a{padding:14px 14px;transform:none!important;box-shadow:none!important}
   .plist a:hover{padding-left:14px}
   .signals-card,.proj-detail aside,.contact-card{padding:20px}
