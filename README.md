@@ -38,4 +38,4 @@ npx serve out     # preview the static build
 ```
 
 ## Routes
-`/`  ·  `/career/`  ·  `/projects/`  ·  `/contact/`  ·  `/projects/<slug>/` (×16)
+`/`  ·  `/career/`  ·  `/projects/`  ·  `/contact/`  ·  `/projects/<slug>/` (×17)
