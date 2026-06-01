@@ -25,7 +25,7 @@ at runtime.)
 - **i18n is CSS-driven** (unchanged from the original): `html[data-lang]` shows
   / hides `[data-i18n-en]` / `[data-i18n-ko]` elements.
 - **Projects** are a dynamic SSG route — `src/app/projects/[slug]/page.js` +
-  `generateStaticParams()` pre-renders all 16 project pages.
+  `generateStaticParams()` pre-renders all 17 project pages.
 - **Per-page SEO/OG** via `generateMetadata` / `buildMetadata` (canonical and
   og:url rewritten to the clean routes).
 
