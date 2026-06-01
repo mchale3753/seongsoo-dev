@@ -1,7 +1,10 @@
-# seongsoo.dev — React / Next.js port
+# seongsoo.dev — Portfolio site
 
-Next.js (App Router, **static export**) port of the original static
-`portfolio-site`. Same dark editorial design, same KR/EN content, clean routes.
+[![Live](https://img.shields.io/badge/Live-seongsoo.dev-4ade80?style=for-the-badge&logo=vercel&logoColor=white)](https://seongsoo.dev)
+
+Next.js (App Router, **static export**) portfolio site for Seongsoo Shin — full-stack engineer, ex-CTO, 17 projects across a decade.
+Same dark editorial design, bilingual KR/EN content, clean routes.
+
 
 ## Why static export
 The site has no server runtime — `next.config.mjs` uses `output: 'export'`, so
