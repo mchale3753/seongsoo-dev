@@ -35,8 +35,8 @@ export const FooterLinks = {
   ),
   projects: (
     <>
-      <Link href="/career/" data-i18n-en="">← Career</Link>
-      <Link href="/career/" data-i18n-ko="">← 커리어</Link>
+      <Link href="/" data-i18n-en="">← Index</Link>
+      <Link href="/" data-i18n-ko="">← 인덱스</Link>
       &nbsp;·&nbsp;
       <Link href="/contact/" data-i18n-en="">Contact →</Link>
       <Link href="/contact/" data-i18n-ko="">연락 →</Link>
@@ -44,8 +44,8 @@ export const FooterLinks = {
   ),
   contact: (
     <>
-      <Link href="/career/" data-i18n-en="">← Career</Link>
-      <Link href="/career/" data-i18n-ko="">← 커리어</Link>
+      <Link href="/projects/" data-i18n-en="">← Projects</Link>
+      <Link href="/projects/" data-i18n-ko="">← 프로젝트</Link>
       &nbsp;·&nbsp;
       <Link href="/" data-i18n-en="">Index ↑</Link>
       <Link href="/" data-i18n-ko="">인덱스 ↑</Link>
