@@ -503,12 +503,15 @@ html[data-lang="ko"] .career-intro h1{font-weight:600;letter-spacing:-0.028em}
 .career-intro p{margin:0 0 14px;color:var(--ink-dim);font-size:15px;line-height:1.75;max-width:55ch}
 .career-intro p strong{color:var(--ink);font-weight:500}
 
-/* positioning callout section */
-.positioning-callout{padding:clamp(32px,4vw,52px) 0;border-top:1px solid var(--line)}
-.positioning-callout .hero-quote-wrap{margin-top:0}
-
 /* hero positioning quote */
 .hero-quote-wrap{margin-top:24px}
+/* inside intro (dark bg) */
+.intro-quote{margin-top:20px;margin-bottom:4px}
+.intro-quote .hero-quote{
+  border-left-color:rgba(184,152,86,.6);
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.65);
+}
 .hero-quote{
   margin:0;padding:14px 18px;
   border-left:2px solid var(--accent);
