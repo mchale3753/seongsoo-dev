@@ -303,6 +303,9 @@ a.tag:hover{color:var(--accent);}
 .foot a:hover{color:var(--ink)}
 .foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
 
+/* ── typography: prevent orphans, balance EN line breaks ── */
+h1,h2,h3,h4{text-wrap:balance;}
+.intro .lede,.cap p,.tl-what p{text-wrap:pretty;}
 /* ─────────────────────────────────────────────
    INDEX (랜딩) — intro + project list
    ───────────────────────────────────────────── */
@@ -376,12 +379,21 @@ html[data-lang="ko"] .intro h1 .light{font-weight:400;color:var(--ink-mute)}
 /* Project list (silva-style table with thumbnails) */
 .plist{margin-top:0;border-top:1px solid var(--line-soft);border-radius:3px;overflow:hidden}
 .plist a{
-  display:grid;grid-template-columns:52px 96px 1fr auto 36px;
+  display:grid;grid-template-columns:52px 96px 1fr auto auto 36px;
   gap:20px;align-items:center;
   padding:18px 20px;
   border:none;border-bottom:1px solid var(--line-soft);
   color:var(--ink);
   transition:padding .3s cubic-bezier(.2,.7,.2,1), color .22s ease, background .22s ease;
+}
+/* live row — persistent green left border + subtle tint */
+.plist a.is-live{
+  border-left:2px solid rgba(74,222,128,.55);
+  background:linear-gradient(90deg, rgba(74,222,128,.04), transparent 50%);
+}
+.plist a.is-live:hover{
+  border-left-color:rgba(74,222,128,.9);
+  background:linear-gradient(90deg, rgba(74,222,128,.07), rgba(184,152,86,.04) 60%, transparent);
 }
 .plist a:hover{padding-left:26px;color:var(--accent-2);background:linear-gradient(90deg, rgba(184,152,86,.05), transparent 60%)}
 .plist a:hover .thumb{border-color:rgba(184,152,86,.45)}
@@ -417,14 +429,29 @@ html[data-lang="ko"] .plist .title{font-weight:500;letter-spacing:-0.02em}
   font-family:var(--mono);font-size:11px;color:var(--ink-mute);
   letter-spacing:.06em;text-transform:uppercase;text-align:right;
 }
-.plist .meta .live{
-  color:var(--good);white-space:nowrap;
+/* live-pill: standalone badge column */
+.plist .live-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--good);
+  border:1px solid rgba(74,222,128,.3);
+  border-radius:999px;
+  padding:3px 9px 3px 7px;
+  white-space:nowrap;
+  background:rgba(74,222,128,.06);
 }
-.plist .meta .live::before{
-  content:"";display:inline-block;width:6px;height:6px;margin-right:5px;
+.plist .live-pill::before{
+  content:"";display:inline-block;width:5px;height:5px;
   border-radius:50%;background:var(--good);
-  box-shadow:0 0 8px rgba(74,222,128,.55);vertical-align:middle;
+  box-shadow:0 0 6px rgba(74,222,128,.7);
+  animation:pulse-dot 2s ease-in-out infinite;
 }
+@keyframes pulse-dot{
+  0%,100%{opacity:1;box-shadow:0 0 6px rgba(74,222,128,.7);}
+  50%{opacity:.6;box-shadow:0 0 10px rgba(74,222,128,.4);}
+}
+/* legacy .meta .live — hide (replaced by live-pill) */
+.plist .meta .live{display:none;}
 .plist .arrow{
   color:var(--ink-faint);font-size:20px;font-weight:300;
   transition:transform .3s cubic-bezier(.2,.7,.2,1), color .22s ease;
@@ -432,7 +459,8 @@ html[data-lang="ko"] .plist .title{font-weight:500;letter-spacing:-0.02em}
 }
 .plist a:hover .arrow{transform:translateX(6px);color:var(--accent)}
 @media (max-width:780px){
-  .plist a{grid-template-columns:36px 72px 1fr 28px;gap:14px;padding:14px 14px}
+  .plist a{grid-template-columns:36px 72px 1fr auto 28px;gap:14px;padding:14px 14px}
+  .plist .live-pill{font-size:9px;padding:2px 7px 2px 6px;}
   .plist .thumb{width:72px;height:48px}
   .plist .meta{display:none}
   .plist .title{font-size:16px}
