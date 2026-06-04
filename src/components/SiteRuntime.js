@@ -173,16 +173,46 @@ export default function SiteRuntime() {
     }
 
     // ───── scroll progress bar ─────
-    const bar = document.getElementById('scroll-progress');
+    const segs = Array.from(document.querySelectorAll('#scroll-progress .seg'));
+    const sectionIds = ['intro', 'profile', 'work', 'stack', 'timeline', 'contact'];
+    function getSections() {
+      return sectionIds.map(id =>
+        id === 'intro'
+          ? document.querySelector('section.intro')
+          : document.getElementById(id)
+      ).filter(Boolean);
+    }
     function updateProgress() {
-      if (!bar) return;
+      const sections = getSections();
+      if (!sections.length || !segs.length) return;
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      bar.style.width = pct + '%';
+      const viewH = window.innerHeight;
+      sections.forEach((sec, i) => {
+        const seg = segs[i];
+        if (!seg) return;
+        const top = sec.offsetTop;
+        const bottom = top + sec.offsetHeight;
+        if (scrollTop + viewH >= bottom) {
+          seg.classList.add('done');
+          seg.classList.remove('active');
+        } else if (scrollTop + viewH > top) {
+          const p = Math.min(1, (scrollTop + viewH - top) / sec.offsetHeight);
+          seg.style.setProperty('--p', p);
+          seg.classList.add('active');
+          seg.classList.remove('done');
+        } else {
+          seg.classList.remove('done', 'active');
+          seg.style.setProperty('--p', 0);
+        }
+      });
     }
     window.addEventListener('scroll', updateProgress, { passive: true });
-    cleanups.push(() => window.removeEventListener('scroll', updateProgress));
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress();
+    cleanups.push(() => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    });
 
     // ───── reveal ─────
     if ('IntersectionObserver' in window) {
