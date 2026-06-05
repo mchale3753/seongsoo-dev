@@ -1,17 +1,7 @@
-import PageShell from '@/components/PageShell';
-import ProjectModal from '@/components/ProjectModal';
-import { FooterLinks } from '@/components/Footer';
-import { buildMetadata } from '@/lib/meta';
-import content from '@/data/content.json';
+import { redirect } from 'next/navigation';
 
-const page = content.projects;
-export const metadata = buildMetadata(page.meta);
-
+// Projects list page deprecated — merged into index.
+// Redirect anyone who lands on /projects/ to the index #projects anchor.
 export default function Page() {
-  return (
-    <>
-      <PageShell active="projects" html={page.main} footerLinks={FooterLinks.projects} />
-      <ProjectModal details={content.projectDetails} />
-    </>
-  );
+  redirect('/#projects');
 }
