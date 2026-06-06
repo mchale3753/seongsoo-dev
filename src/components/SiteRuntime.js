@@ -174,7 +174,7 @@ export default function SiteRuntime() {
 
     // ───── scroll progress bar ─────
     const segs = Array.from(document.querySelectorAll('#scroll-progress .seg'));
-    const sectionIds = ['intro', 'profile', 'work', 'stack', 'timeline', 'contact'];
+    const sectionIds = ['intro', 'profile', 'stack', 'projects', 'timeline', 'contact'];
     function getSections() {
       return sectionIds.map(id =>
         id === 'intro'
