@@ -86,9 +86,9 @@ export default function ProjectModal({ details }) {
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      // scroll modal body to top
+      // scroll modal body to top after paint
       const mbox = modal.querySelector('.proj-modal-box');
-      if (mbox) mbox.scrollTop = 0;
+      if (mbox) { mbox.scrollTop = 0; requestAnimationFrame(() => { mbox.scrollTop = 0; }); }
     }
 
     function closeModal() {
