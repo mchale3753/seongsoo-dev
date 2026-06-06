@@ -103,15 +103,23 @@ export default function ProjectModal({ details }) {
     function openModal(slug) {
       const proj = details[slug];
       if (!proj) return;
+      const mbox = modal.querySelector('.proj-modal-box');
+      // 콘텐츠 교체 전 스크롤 초기화
+      if (mbox) mbox.scrollTop = 0;
       body.innerHTML = proj.main;
       attachShots();
       attachNavLinks();
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      // scroll modal body to top after paint
-      const mbox = modal.querySelector('.proj-modal-box');
-      if (mbox) { mbox.scrollTop = 0; requestAnimationFrame(() => { mbox.scrollTop = 0; }); }
+      // 레이아웃 재계산 후 두 번 더 보장
+      if (mbox) {
+        mbox.scrollTop = 0;
+        requestAnimationFrame(() => {
+          mbox.scrollTop = 0;
+          requestAnimationFrame(() => { mbox.scrollTop = 0; });
+        });
+      }
     }
 
     function closeModal() {
