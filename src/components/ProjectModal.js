@@ -124,7 +124,9 @@ export default function ProjectModal({ details }) {
 
     // intercept .plist a clicks via delegation
     const onDocClick = (e) => {
-      const link = e.target.closest('.plist a');
+      // 모달이 열려 있으면 모달 내부 링크는 attachNavLinks 에서 처리
+      if (modal.classList.contains('open')) return;
+      const link = e.target.closest('a[href]');
       if (!link) return;
       const href  = link.getAttribute('href') || '';
       const match = href.match(/\/projects\/([^/]+)\//);
