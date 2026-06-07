@@ -214,6 +214,14 @@ export default function ProjectModal({ details }) {
     document.addEventListener('keydown', onKey);
     cleanups.push(() => document.removeEventListener('keydown', onKey));
 
+    // ?modal=<slug> 쿼리파람으로 진입 시 자동 오픈
+    const urlSlug = new URLSearchParams(window.location.search).get('modal');
+    if (urlSlug && details[urlSlug]) {
+      // URL 클린업 후 모달 열기
+      window.history.replaceState(null, '', window.location.pathname);
+      openModal(urlSlug);
+    }
+
     return () => cleanups.forEach((fn) => fn());
   }, [details]);
 
