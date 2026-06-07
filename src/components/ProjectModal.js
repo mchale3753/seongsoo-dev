@@ -2,6 +2,47 @@
 
 import { useEffect, useRef } from 'react';
 
+// ── body scroll lock (iOS Safari safe) ──────────────────────────────────────
+// lockBodyScroll / unlockBodyScroll은 모달이 닫혀 있을 때만 호출해야 한다.
+// 이미 lock된 상태에서 openModal을 재호출(프로젝트 간 이동)하면 lock을 건드리지 않음.
+function lockBodyScroll() {
+  if (document.body.dataset.scrollLocked) return; // 이미 잠긴 상태면 skip
+  const scrollY = window.scrollY;
+  document.body.dataset.scrollY = scrollY;
+  document.body.dataset.scrollLocked = '1';
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.width = '100%';
+}
+function unlockBodyScroll() {
+  if (!document.body.dataset.scrollLocked) return;
+  const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
+  delete document.body.dataset.scrollY;
+  delete document.body.dataset.scrollLocked;
+  window.scrollTo(0, scrollY);
+}
+
+// ── focus trap ───────────────────────────────────────────────────────────────
+const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
+function trapFocus(container, e) {
+  const nodes = Array.from(container.querySelectorAll(FOCUSABLE)).filter(
+    (n) => !n.closest('[aria-hidden="true"]')
+  );
+  if (!nodes.length) return;
+  const first = nodes[0];
+  const last  = nodes[nodes.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+  }
+}
+
 export default function ProjectModal({ details }) {
   const modalRef   = useRef(null);
   const bodyRef    = useRef(null);
@@ -10,6 +51,7 @@ export default function ProjectModal({ details }) {
   const lbPrevRef  = useRef(null);
   const lbNextRef  = useRef(null);
   const galState   = useRef({ gal: null, idx: 0 });
+  const prevFocus  = useRef(null); // 모달 열기 전 포커스 복원용
 
   useEffect(() => {
     const modal  = modalRef.current;
@@ -21,7 +63,7 @@ export default function ProjectModal({ details }) {
     if (!modal || !body) return;
     const cleanups = [];
 
-    // ── lightbox ──
+    // ── lightbox ──────────────────────────────────────────────────────────────
     function openLB(gal, idx) {
       if (!lb || !lbImg) return;
       const arr = (window.GALLERIES || {})[gal] || [];
@@ -29,7 +71,6 @@ export default function ProjectModal({ details }) {
       lbImg.src = arr[idx] || '';
       lb.classList.add('open');
       lb.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
     }
     function closeLB() {
       if (!lb || !lbImg) return;
@@ -53,7 +94,7 @@ export default function ProjectModal({ details }) {
     if (lbPrev) { lbPrev.addEventListener('click', onLbPrev); cleanups.push(() => lbPrev.removeEventListener('click', onLbPrev)); }
     if (lbNext) { lbNext.addEventListener('click', onLbNext); cleanups.push(() => lbNext.removeEventListener('click', onLbNext)); }
 
-    // ── modal ──
+    // ── modal helpers ─────────────────────────────────────────────────────────
     function attachShots() {
       body.querySelectorAll('a.shot').forEach((a) => {
         a.addEventListener('click', (e) => {
@@ -69,7 +110,7 @@ export default function ProjectModal({ details }) {
         a.addEventListener('click', (e) => {
           const href = a.getAttribute('href') || '';
 
-          // 다른 프로젝트 상세 → 모달 교체
+          // 다른 프로젝트 → 모달 콘텐츠 교체
           const projMatch = href.match(/\/projects\/([^/]+)\//);
           if (projMatch && details[projMatch[1]]) {
             e.preventDefault();
@@ -78,19 +119,16 @@ export default function ProjectModal({ details }) {
             return;
           }
 
-          // 프로젝트 목록 / 섹션 앵커 / 홈 → 모달 닫고 이동
+          // 섹션 앵커 / 홈 → 모달 닫고 이동
           const isSection = href === '/projects/' || href === '/' || href.startsWith('/#');
           if (isSection) {
             e.preventDefault();
             e.stopPropagation();
             closeModal();
             if (href === '/projects/' || href === '/') {
-              // index 페이지 해당 섹션으로
-              const anchor = href === '/projects/' ? '#projects' : '#top';
-              window.location.hash = anchor;
+              window.location.hash = href === '/projects/' ? '#projects' : '#top';
             } else {
-              // /#contact, /#projects 등 해시 앵커
-              const hash = href.replace(/^\//, '');
+              const hash   = href.replace(/^\//, '');
               const target = document.querySelector(hash);
               if (target) target.scrollIntoView({ behavior: 'smooth' });
               else window.location.href = href;
@@ -100,35 +138,29 @@ export default function ProjectModal({ details }) {
       });
     }
 
-    function lockBodyScroll() {
-      const scrollY = window.scrollY;
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.dataset.scrollY = scrollY;
-    }
-    function unlockBodyScroll() {
-      const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      delete document.body.dataset.scrollY;
-      window.scrollTo(0, scrollY);
-    }
-
     function openModal(slug) {
       const proj = details[slug];
       if (!proj) return;
-      // 실제 스크롤 컨테이너는 .proj-modal-body (overflow-y:auto)
+
+      // 처음 열 때만 포커스 저장 + body lock
+      if (!modal.classList.contains('open')) {
+        prevFocus.current = document.activeElement;
+        lockBodyScroll();
+      }
+
+      // 콘텐츠 교체 + 스크롤 리셋
       body.scrollTop = 0;
       body.innerHTML = proj.main;
       attachShots();
       attachNavLinks();
+
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
-      lockBodyScroll();
+
+      // 닫기 버튼으로 포커스 이동
+      const closeBtn = modal.querySelector('.proj-modal-close');
+      if (closeBtn) closeBtn.focus();
+
       body.scrollTop = 0;
       requestAnimationFrame(() => {
         body.scrollTop = 0;
@@ -142,12 +174,16 @@ export default function ProjectModal({ details }) {
       modal.setAttribute('aria-hidden', 'true');
       unlockBodyScroll();
       body.innerHTML = '';
+      // 포커스 복원
+      if (prevFocus.current && typeof prevFocus.current.focus === 'function') {
+        prevFocus.current.focus();
+        prevFocus.current = null;
+      }
     }
 
-    // intercept .plist a clicks via delegation
+    // 페이지 내 프로젝트 링크 전역 인터셉트
     const onDocClick = (e) => {
-      // 모달이 열려 있으면 모달 내부 링크는 attachNavLinks 에서 처리
-      if (modal.classList.contains('open')) return;
+      if (modal.classList.contains('open')) return; // 모달 열려있으면 attachNavLinks 처리
       const link = e.target.closest('a[href]');
       if (!link) return;
       const href  = link.getAttribute('href') || '';
@@ -159,19 +195,21 @@ export default function ProjectModal({ details }) {
     document.addEventListener('click', onDocClick);
     cleanups.push(() => document.removeEventListener('click', onDocClick));
 
-    // backdrop click
+    // 백드롭 클릭
     const onBackdrop = (e) => { if (e.target === modal) closeModal(); };
     modal.addEventListener('click', onBackdrop);
     cleanups.push(() => modal.removeEventListener('click', onBackdrop));
 
-    // keyboard
+    // 키보드: Escape / 화살표 / Tab 트랩
     const onKey = (e) => {
       if (lb && lb.classList.contains('open')) {
-        if (e.key === 'Escape')      { closeLB(); return; }
-        if (e.key === 'ArrowLeft')   { stepLB(-1); return; }
-        if (e.key === 'ArrowRight')  { stepLB(1); return; }
+        if (e.key === 'Escape')     { closeLB(); return; }
+        if (e.key === 'ArrowLeft')  { stepLB(-1); return; }
+        if (e.key === 'ArrowRight') { stepLB(1); return; }
       }
-      if (modal.classList.contains('open') && e.key === 'Escape') closeModal();
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key === 'Tab')    { trapFocus(modal, e); }
     };
     document.addEventListener('keydown', onKey);
     cleanups.push(() => document.removeEventListener('keydown', onKey));
@@ -179,6 +217,7 @@ export default function ProjectModal({ details }) {
     return () => cleanups.forEach((fn) => fn());
   }, [details]);
 
+  // X 버튼 — useEffect 밖이므로 unlockBodyScroll 직접 호출
   function handleClose() {
     const modal = modalRef.current;
     const body  = bodyRef.current;
@@ -188,14 +227,11 @@ export default function ProjectModal({ details }) {
     if (lbImg) { lbImg.src = ''; }
     if (modal) { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
     if (body)  { body.innerHTML = ''; }
-    // iOS Safari unlock
-    const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    delete document.body.dataset.scrollY;
-    window.scrollTo(0, scrollY);
+    unlockBodyScroll();
+    if (prevFocus.current && typeof prevFocus.current.focus === 'function') {
+      prevFocus.current.focus();
+      prevFocus.current = null;
+    }
   }
 
   return (
