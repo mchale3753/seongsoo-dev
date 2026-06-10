@@ -586,6 +586,8 @@ html[data-lang="ko"] .career-intro h1{font-weight:600;letter-spacing:-0.028em}
   color:var(--ink-dim);line-height:1.6;
   max-width:56ch;
 }
+.hero-quote br{display:block}
+@media (max-width:520px){.hero-quote br{display:none}}
 html[data-lang="ko"] .hero-quote{font-family:var(--sans-kr);font-style:normal;font-size:clamp(13.5px,1.4vw,15.5px)}
 
 .signals-card{
